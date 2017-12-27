@@ -1,32 +1,20 @@
 module.exports = {
     "env": {
         "node": true,
-        "commonjs": true,
+        "mocha": true,
         "es6": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "script",
+        "ecmaVersion": 6,
     },
     "rules": {
-        "indent": [
-            "error",
-            "tab"
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
-        "console": [
-            "error"
-        ]
+        "no-console": ["error",{
+            "allow": ["warn", "error", "info"]
+        }]
+    },
+    "globals":{
+
     }
 };
