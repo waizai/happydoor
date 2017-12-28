@@ -2,7 +2,7 @@
 * @Author: dangxiaoli
 * @Date:   2017-12-25 20:08:21
 * @Last Modified by:   dangxiaoli
-* @Last Modified time: 2017-12-27 21:21:42
+* @Last Modified time: 2017-12-28 15:22:14
 */
 //处理路径  尽量使用绝对路径
 
@@ -11,17 +11,32 @@ const chalk = require('chalk');
 const path = require('path');
 const conf = require('./config/defaultConfig.js');
 const router = require('./helper/router.js');
-const Handlebars = require('handlebars');
 
-const tplPath = path.join(__dirname,'./template/dir.tpl');
-const source = fs.readFileSync(tplPath,'utf-8');
-const template = Handlebars.compile(source);
-
+//1.启动http serve
+//步骤1以后都是假设请求抵达后
 const server = http.createServer((req, res) => {
-    //以设置的静态文件目录为base，映射得到文件位置
+    //2.以设置的静态文件目录为base，映射得到文件位置  作用:连接路径
     const filePath = path.join(conf.root, req.url);
 
     router(req, res, filePath)
+})
+
+
+
+server.listen(conf.port, conf.hostname, () => {
+    const addr = `http://${conf.hostname}:${conf.port}`
+
+    console.log(`Server started at ${chalk.green(addr)}`)
+})
+
+
+
+
+
+
+
+
+
 
 
 
@@ -54,19 +69,3 @@ const server = http.createServer((req, res) => {
     //         })
     //     }
     // })
-
-})
-
-
-
-server.listen(conf.port, conf.hostname, () => {
-    const addr = `http://${conf.hostname}:${conf.port}`
-
-    console.log(`Server started at ${chalk.green(addr)}`)
-})
-
-
-
-
-
-
