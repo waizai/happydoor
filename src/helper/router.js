@@ -2,7 +2,7 @@
 * @Author: dangxiaoli
 * @Date:   2017-12-27 20:51:09
 * @Last Modified by:   dangxiaoli
-* @Last Modified time: 2017-12-30 23:45:12
+* @Last Modified time: 2018-01-01 14:47:36
 */
 const fs = require('fs');
 const promisify = require('util').promisify;
@@ -10,7 +10,6 @@ const stat = promisify(fs.stat);
 const path = require('path');
 const readdir = promisify(fs.readdir);
 const Handlebars = require('handlebars');
-const config = require('../config/defaultConfig.js');
 const compress = require('./compress.js');
 const range = require('./range.js');
 const isFresh = require('./cache.js');
@@ -22,7 +21,7 @@ const template = Handlebars.compile(source);
 const mime = require('./mime.js')
 
 
-module.exports = async function(req, res, filePath){
+module.exports = async function(req, res, filePath, config){
     try{
         //stat方法的参数是一个文件或目录，它产生一个对象，该对象包含了该文件或目录的具体信息。
         //我们往往通过该方法，判断正在处理的到底是一个文件，还是一个目录。

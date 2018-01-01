@@ -2,7 +2,7 @@
 * @Author: dangxiaoli
 * @Date:   2017-12-25 20:08:21
 * @Last Modified by:   dangxiaoli
-* @Last Modified time: 2017-12-28 15:22:14
+* @Last Modified time: 2018-01-01 20:16:47
 */
 //处理路径  尽量使用绝对路径
 
@@ -11,28 +11,36 @@ const chalk = require('chalk');
 const path = require('path');
 const conf = require('./config/defaultConfig.js');
 const router = require('./helper/router.js');
-
-//1.启动http serve
-//步骤1以后都是假设请求抵达后
-const server = http.createServer((req, res) => {
-    //2.以设置的静态文件目录为base，映射得到文件位置  作用:连接路径
-    const filePath = path.join(conf.root, req.url);
-
-    router(req, res, filePath)
-})
+const openUrl = require('./helper/openUrl.js');
 
 
 
-server.listen(conf.port, conf.hostname, () => {
-    const addr = `http://${conf.hostname}:${conf.port}`
+class Server {
+    constructor(config){
+        this.conf = Object.assign({}, conf, config);
+    }
+    start(){
+        //1.启动http serve
+        //步骤1以后都是假设请求抵达后
+        const server = http.createServer((req, res) => {
+            //2.以设置的静态文件目录为base，映射得到文件位置  作用:连接路径
+            const filePath = path.join(this.conf.root, req.url);
 
-    console.log(`Server started at ${chalk.green(addr)}`)
-})
+            router(req, res, filePath, this.conf)
+        })
 
 
 
+        server.listen(this.conf.port, this.conf.hostname, () => {
+            const addr = `http://${this.conf.hostname}:${this.conf.port}`
 
+            console.log(`Server started at ${chalk.green(addr)}`)
+            openUrl(addr);
+        })
+    }
+}
 
+module.exports = Server;
 
 
 
